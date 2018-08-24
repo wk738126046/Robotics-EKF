@@ -21,51 +21,20 @@ The details will be different than the univariate filter because these are vecto
 #### (1) prediction
 input x: [x, y, yaw, v]
 state function: 
-$$
-x_{t+1} = x_t + v*dt*cos(yaw)\\
-y_{t+1} = y_t + v*dt*sin(yaw)\\
-yaw_{t+1} = yaw_t + \omega*dt\\
-v_{t+1} =  v_{t}\\
-$$
+<img src="https://latex.codecogs.com/png.latex?x_{t&plus;1}&space;=&space;x_t&space;&plus;&space;v*dt*cos(yaw)\\&space;y_{t&plus;1}&space;=&space;y_t&space;&plus;&space;v*dt*sin(yaw)\\&space;yaw_{t&plus;1}&space;=&space;yaw_t&space;&plus;&space;\omega*dt\\&space;v_{t&plus;1}&space;=&space;v_{t}\\" title="x_{t+1} = x_t + v*dt*cos(yaw)\\ y_{t+1} = y_t + v*dt*sin(yaw)\\ yaw_{t+1} = yaw_t + \omega*dt\\ v_{t+1} = v_{t}\\" />
 so the matrix F is 
-$$
-F = \begin{bmatrix}
-1.0 & 0 &0 &0 \\
-0 & 1.0 &0 &0 \\
-0 & 0 & 1.0 &0 \\
-0 & 0 &0 &0 \\a
-\end{bmatrix}
-$$
-and the jacobian  of state function is 
+<a href="https://www.codecogs.com/eqnedit.php?latex=F&space;=&space;\begin{bmatrix}&space;1.0&space;&&space;0&space;&0&space;&0&space;\\&space;0&space;&&space;1.0&space;&0&space;&0&space;\\&space;0&space;&&space;0&space;&&space;1.0&space;&0&space;\\&space;0&space;&&space;0&space;&0&space;&0&space;\\&space;\end{bmatrix}" target="_blank"><img src="https://latex.codecogs.com/png.latex?F&space;=&space;\begin{bmatrix}&space;1.0&space;&&space;0&space;&0&space;&0&space;\\&space;0&space;&&space;1.0&space;&0&space;&0&space;\\&space;0&space;&&space;0&space;&&space;1.0&space;&0&space;\\&space;0&space;&&space;0&space;&0&space;&0&space;\\&space;\end{bmatrix}" title="F = \begin{bmatrix} 1.0 & 0 &0 &0 \\ 0 & 1.0 &0 &0 \\ 0 & 0 & 1.0 &0 \\ 0 & 0 &0 &0 \\ \end{bmatrix}" /></a>
 
-$$
-Fj = \begin{bmatrix}
-\frac{\partial x_{t+1}}{\partial x} & \frac{\partial x_{t+1}}{\partial y} & \frac{\partial x_{t+1}}{\partial yaw} & \frac{\partial x_{t+1}}{\partial v} \\
-\frac{\partial y_{t+1}}{\partial x} & \frac{\partial y_{t+1}}{\partial y} & \frac{\partial y_{t+1}}{\partial yaw} & \frac{\partial y_{t+1}}{\partial v} \\
-\frac{\partial yaw}{\partial x} & \frac{\partial yaw}{\partial y} & \frac{\partial yaw}{\partial yaw} & \frac{\partial yaw}{\partial v} \\
-\frac{\partial v}{\partial x} & \frac{\partial v}{\partial y} & \frac{\partial v}{\partial yaw} & \frac{\partial v}{\partial v} \\
-\end{bmatrix}
-$$
-hence, 
-$$
-\frac{dx}{dyaw} = -v*dt*sin(yaw) \\
-\frac{dx}{dv} = dt*cos(yaw) \\
-\frac{dy}{dyaw} = v*dt*cos(yaw) \\
-\frac{dy}{dv} = dt*sin(yaw) \\
-$$
+and the jacobian  of state function is 
+<a href="https://www.codecogs.com/eqnedit.php?latex=Fj&space;=&space;\begin{bmatrix}&space;\frac{\partial&space;x_{t&plus;1}}{\partial&space;x}&space;&&space;\frac{\partial&space;x_{t&plus;1}}{\partial&space;y}&space;&&space;\frac{\partial&space;x_{t&plus;1}}{\partial&space;yaw}&space;&&space;\frac{\partial&space;x_{t&plus;1}}{\partial&space;v}&space;\\&space;\frac{\partial&space;y_{t&plus;1}}{\partial&space;x}&space;&&space;\frac{\partial&space;y_{t&plus;1}}{\partial&space;y}&space;&&space;\frac{\partial&space;y_{t&plus;1}}{\partial&space;yaw}&space;&&space;\frac{\partial&space;y_{t&plus;1}}{\partial&space;v}&space;\\&space;\frac{\partial&space;yaw}{\partial&space;x}&space;&&space;\frac{\partial&space;yaw}{\partial&space;y}&space;&&space;\frac{\partial&space;yaw}{\partial&space;yaw}&space;&&space;\frac{\partial&space;yaw}{\partial&space;v}&space;\\&space;\frac{\partial&space;v}{\partial&space;x}&space;&&space;\frac{\partial&space;v}{\partial&space;y}&space;&&space;\frac{\partial&space;v}{\partial&space;yaw}&space;&&space;\frac{\partial&space;v}{\partial&space;v}&space;\\&space;\end{bmatrix}" target="_blank"><img src="https://latex.codecogs.com/png.latex?Fj&space;=&space;\begin{bmatrix}&space;\frac{\partial&space;x_{t&plus;1}}{\partial&space;x}&space;&&space;\frac{\partial&space;x_{t&plus;1}}{\partial&space;y}&space;&&space;\frac{\partial&space;x_{t&plus;1}}{\partial&space;yaw}&space;&&space;\frac{\partial&space;x_{t&plus;1}}{\partial&space;v}&space;\\&space;\frac{\partial&space;y_{t&plus;1}}{\partial&space;x}&space;&&space;\frac{\partial&space;y_{t&plus;1}}{\partial&space;y}&space;&&space;\frac{\partial&space;y_{t&plus;1}}{\partial&space;yaw}&space;&&space;\frac{\partial&space;y_{t&plus;1}}{\partial&space;v}&space;\\&space;\frac{\partial&space;yaw}{\partial&space;x}&space;&&space;\frac{\partial&space;yaw}{\partial&space;y}&space;&&space;\frac{\partial&space;yaw}{\partial&space;yaw}&space;&&space;\frac{\partial&space;yaw}{\partial&space;v}&space;\\&space;\frac{\partial&space;v}{\partial&space;x}&space;&&space;\frac{\partial&space;v}{\partial&space;y}&space;&&space;\frac{\partial&space;v}{\partial&space;yaw}&space;&&space;\frac{\partial&space;v}{\partial&space;v}&space;\\&space;\end{bmatrix}" title="Fj = \begin{bmatrix} \frac{\partial x_{t+1}}{\partial x} & \frac{\partial x_{t+1}}{\partial y} & \frac{\partial x_{t+1}}{\partial yaw} & \frac{\partial x_{t+1}}{\partial v} \\ \frac{\partial y_{t+1}}{\partial x} & \frac{\partial y_{t+1}}{\partial y} & \frac{\partial y_{t+1}}{\partial yaw} & \frac{\partial y_{t+1}}{\partial v} \\ \frac{\partial yaw}{\partial x} & \frac{\partial yaw}{\partial y} & \frac{\partial yaw}{\partial yaw} & \frac{\partial yaw}{\partial v} \\ \frac{\partial v}{\partial x} & \frac{\partial v}{\partial y} & \frac{\partial v}{\partial yaw} & \frac{\partial v}{\partial v} \\ \end{bmatrix}" /></a>
+
+hence:
+<img src="https://latex.codecogs.com/png.latex?\frac{dx}{dyaw}&space;=&space;-v*dt*sin(yaw)&space;\\&space;\frac{dx}{dv}&space;=&space;dt*cos(yaw)&space;\\&space;\frac{dy}{dyaw}&space;=&space;v*dt*cos(yaw)&space;\\&space;\frac{dy}{dv}&space;=&space;dt*sin(yaw)&space;\\" title="\frac{dx}{dyaw} = -v*dt*sin(yaw) \\ \frac{dx}{dv} = dt*cos(yaw) \\ \frac{dy}{dyaw} = v*dt*cos(yaw) \\ \frac{dy}{dv} = dt*sin(yaw) \\" />
 #### (2)update
 if we use GPS as a positioning observation
 the measure function is 
 
-$$
-z = \begin{bmatrix}
-1 & 0 & 0 & 0 \\
-0 & 1 & 0 & 0 \\
-\end{bmatrix} 
-\begin{bmatrix}
-x \\ y \\ yaw \\ v \\
-\end{bmatrix} 
-$$
+<a href="https://www.codecogs.com/eqnedit.php?latex=z&space;=&space;\begin{bmatrix}&space;1&space;&&space;0&space;&&space;0&space;&&space;0&space;\\&space;0&space;&&space;1&space;&&space;0&space;&&space;0&space;\\&space;\end{bmatrix}&space;\begin{bmatrix}&space;x&space;\\&space;y&space;\\&space;yaw&space;\\&space;v&space;\\&space;\end{bmatrix}" target="_blank"><img src="https://latex.codecogs.com/png.latex?z&space;=&space;\begin{bmatrix}&space;1&space;&&space;0&space;&&space;0&space;&&space;0&space;\\&space;0&space;&&space;1&space;&&space;0&space;&&space;0&space;\\&space;\end{bmatrix}&space;\begin{bmatrix}&space;x&space;\\&space;y&space;\\&space;yaw&space;\\&space;v&space;\\&space;\end{bmatrix}" title="z = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ \end{bmatrix} \begin{bmatrix} x \\ y \\ yaw \\ v \\ \end{bmatrix}" /></a>
 after calc Jacobian uesd equal object with Fj,we can finish KF as folow :
 - S = Hj * P_Pred * Hj.T + R 
 - K = P_pred * Hj.T  *np.linalg.inv(S)
